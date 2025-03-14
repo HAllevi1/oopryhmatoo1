@@ -61,13 +61,14 @@ public class andmeBaas {
     public void kõikÜlesanded() { //tõmbame ülesanded andmebaasist programmi  TODO LIPPING
 
     }
+
     public void kustutaÜlesanne() { //eemaldame ülesande andmebaasist       TODO LIPPING
 
     }
 
-    public void muuda(int valik) {
+    public void muudaYlesannet(int valik) {
         Scanner sc = new Scanner(System.in);
-        if (valik == 1) {
+        if (valik == 3) {
 
             System.out.println("Sisesta mis rea tähtaega soovid vahetada: ");
             int rida = sc.nextInt();
@@ -115,7 +116,7 @@ public class andmeBaas {
                 }
 
             } catch (SQLException e) {
-                System.out.println("Viga ülesande muutmisel: " + e.getMessage());
+                System.out.println("Tähtaja muutmine ebaõnnestus, kontrolli ID-d.");
             }
         } else if (valik == 2) {
 
@@ -167,10 +168,39 @@ public class andmeBaas {
             } catch (SQLException e) {
                 System.out.println("Viga ülesande muutmisel: " + e.getMessage());
             }
-        }
-    }
+        } else if (valik == 4) {
+            System.out.println("Sisesta ülesande rida, mida soovid tehtuks märkida.");
+            int rida = sc.nextInt();
+            sc.nextLine();
+            System.out.println("Kas ülesanne on täidetud? (jah/ei)");
+            String staatus = sc.nextLine();
 
-    public void muudaKirjeldust() { //Muudame andmebaasis oleva ülesande kirjeldust TODO HENRI
+            Boolean staatusBool;
+
+            if (staatus.equals("jah")) {
+                staatusBool = true;
+            } else {
+                staatusBool = false;
+            }
+
+            String määraraStaatus = "UPDATE ylesanded SET staatus = ? WHERE id = ?";
+
+            try (Connection conn = Ühenduvus.yhilduAndmebaasi();
+                 PreparedStatement pstmt3 = conn.prepareStatement(määraraStaatus)) {
+
+                pstmt3.setBoolean(1, staatusBool);
+                pstmt3.setInt(2, rida);
+                int uuendatud = pstmt3.executeUpdate();
+
+                if (uuendatud > 0) {
+                    System.out.println("Ülesande staatus uuendatud!");
+                } else {
+                    System.out.println("viga!!");
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Staatuse uuendamine ebaõnnestus, kontrolli ID-d.");
+            }
 
         } else if (valik == 1) {
             System.out.println("Sisesta rida mille nime soovid muuta; ");

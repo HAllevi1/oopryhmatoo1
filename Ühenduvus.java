@@ -11,7 +11,7 @@ public class Ühenduvus {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(link, kasutaja, parool); // Ühildume To-do list andmebaasi
-            System.out.println("Ühendatud PostgreSQL andmebaasiga edukalt!");
+            System.out.println("Ühendus loodud"); //testi eesmärgil
         } catch (SQLException e) {
             e.printStackTrace();
         }
