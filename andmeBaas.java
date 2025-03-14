@@ -172,5 +172,54 @@ public class andmeBaas {
 
     public void muudaKirjeldust() { //Muudame andmebaasis oleva ülesande kirjeldust TODO HENRI
 
+        } else if (valik == 1) {
+            System.out.println("Sisesta rida mille nime soovid muuta; ");
+            int rida = sc.nextInt();
+            sc.nextLine();
+
+            String nimi = null;
+            String valitudNimi = "SELECT nimi FROM ylesanded WHERE id = ?";
+
+            try (Connection conn = Ühenduvus.yhilduAndmebaasi();
+                 PreparedStatement pstmt4 = conn.prepareStatement(valitudNimi)) {
+
+                pstmt4.setInt(1, rida);
+
+                ResultSet rs = pstmt4.executeQuery();
+
+                if (rs.next()) {
+                    nimi = rs.getString("nimi");
+                    System.out.println("Praeguse ülesande nimi: " + nimi);
+                } else {
+                    System.out.println("Viga andmebaasis nime andmed puuduvad.");
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Nime päring ebaÕnnestus, kontrolli ID-d.");
+            }
+
+            System.out.println("Sisesta uus ülesande nimi: ");
+            String uusNimi = sc.nextLine();
+
+            String nimeUuendamine = "UPDATE ylesanded SET nimi = ? WHERE id = ?";
+
+            try (Connection conn = Ühenduvus.yhilduAndmebaasi();
+                 PreparedStatement pstmt5 = conn.prepareStatement(nimeUuendamine)) {
+
+                pstmt5.setString(1, uusNimi);
+                pstmt5.setInt(2, rida);
+                int uuendatud = pstmt5.executeUpdate();
+                if (uuendatud > 0) {
+                    System.out.println("Ülesande nimi uuendatud!");
+                } else {
+                    System.out.println("Ülesande nime uuendamisel ilmnes viga.");
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Nime uuendamine ebaõnnestus, kontrolli ID-d.");
+            }
+
+
+        }
     }
 }
