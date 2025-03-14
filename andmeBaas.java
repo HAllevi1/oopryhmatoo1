@@ -65,7 +65,20 @@ public class andmeBaas {
 
     }
 
-    public void muudaTähtaega() { //Muudame andmebaasis oleva ülesande tähtaega TODO HENRI
+    public void muuda(int valik) {
+        Scanner sc = new Scanner(System.in);
+        if (valik == 1) {
+
+            System.out.println("Sisesta mis rea tähtaega soovid vahetada: ");
+            int rida = sc.nextInt();
+            sc.nextLine();
+
+            String tahtaeg = null;
+
+            String valitudRida = "SELECT tahtaeg FROM ylesanded WHERE id = ?";
+
+            try (Connection conn = Ühenduvus.yhilduAndmebaasi();
+                 PreparedStatement pstmt2 = conn.prepareStatement(valitudRida)) {
 
                 pstmt2.setInt(1, rida);
                 try (ResultSet rs = pstmt2.executeQuery()) {
