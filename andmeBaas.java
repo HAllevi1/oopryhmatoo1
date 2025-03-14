@@ -67,6 +67,94 @@ public class andmeBaas {
 
     public void muudaTähtaega() { //Muudame andmebaasis oleva ülesande tähtaega TODO HENRI
 
+                pstmt2.setInt(1, rida);
+                try (ResultSet rs = pstmt2.executeQuery()) {
+                    if (rs.next()) {
+                        tahtaeg = rs.getString("tahtaeg");
+                        System.out.println("Praegune tahtaeg: " + tahtaeg);
+                    } else {
+                        System.out.println("Ülesannet ID-ga " + rida + "ei leitud.");
+                        return;
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println("Viga");
+                return;
+            }
+
+            System.out.println("Sisesta uus tähtaeg: ");
+            Date uusTahtaeg = Date.valueOf(sc.nextLine());
+
+            String sql = "UPDATE ylesanded SET tahtaeg = ? WHERE id = ?";
+
+            try (Connection conn = Ühenduvus.yhilduAndmebaasi(); //Ühendame andmebaasi
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) { //Anname muutujale pstmt väärtuse
+
+                //Määrame päringulause veergudele väärtused
+                pstmt.setDate(1, uusTahtaeg);
+                pstmt.setInt(2, rida);
+
+                int uuendatud = pstmt.executeUpdate(); //SQL päringu käivitus ja andmebaasi lisamine
+                if (uuendatud > 0) {
+                    System.out.println("Ülesande tähtaeg uuendatud!");
+                } else {
+                    System.out.println("Uuendamine ebaõnnestus, kontrolli ID-d.");
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Viga ülesande muutmisel: " + e.getMessage());
+            }
+        } else if (valik == 2) {
+
+            System.out.println("Sisesta mis rea kirjeldust sa soovid muuta: ");
+            int rida = sc.nextInt();
+            sc.nextLine();
+
+            String kirjeldus = null;
+
+            String valitudRida = "SELECT kirjeldus FROM ylesanded WHERE id = ?";
+
+            try (Connection conn = Ühenduvus.yhilduAndmebaasi();
+                 PreparedStatement pstmt2 = conn.prepareStatement(valitudRida)) {
+
+                pstmt2.setInt(1, rida);
+                try (ResultSet rs = pstmt2.executeQuery()) {
+                    if (rs.next()) {
+                        kirjeldus = rs.getString("kirjeldus");
+                        System.out.println("Praegune kirjeldus: " + kirjeldus);
+                    } else {
+                        System.out.println("Ülesannet ID-ga " + rida + "ei leitud.");
+                        return;
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println("Viga");
+                return;
+            }
+
+            System.out.println("Sisesta uus kirjeldus: ");
+            String uusKirjeldus = sc.nextLine();
+
+            String sql = "UPDATE ylesanded SET kirjeldus = ? WHERE id = ?";
+
+            try (Connection conn = Ühenduvus.yhilduAndmebaasi(); //Ühendame andmebaasi
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) { //Anname muutujale pstmt väärtuse
+
+                //Määrame päringulause veergudele väärtused
+                pstmt.setString(1, uusKirjeldus);
+                pstmt.setInt(2, rida);
+
+                int uuendatud = pstmt.executeUpdate(); //SQL päringu käivitus ja andmebaasi lisamine
+                if (uuendatud > 0) {
+                    System.out.println("Ülesande kirjeldus uuendatud!");
+                } else {
+                    System.out.println("Uuendamine ebaõnnestus, kontrolli ID-d.");
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Viga ülesande muutmisel: " + e.getMessage());
+            }
+        }
     }
 
     public void muudaKirjeldust() { //Muudame andmebaasis oleva ülesande kirjeldust TODO HENRI
