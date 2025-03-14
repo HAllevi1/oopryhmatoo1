@@ -3,21 +3,6 @@ import java.util.Scanner;
 
 public class andmeBaas {
 
-
-    public Connection yhilduAndmebaasi() { //Ühildume andmebaasi
-        String link = "jdbc:postgresql://localhost:5432/Todo_list";
-        String kasutaja = "postgres";
-        String parool = "postgres";
-
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(link, kasutaja, parool); // Ühildume To-do list andmebaasi
-            System.out.println("Ühendatud PostgreSQL andmebaasiga edukalt!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
     public void lisaYlesanne() { //lisame ülesande andmebaasi
         Scanner sc = new Scanner(System.in);
         System.out.println("Sisesta ülesande nimi: ");
@@ -55,7 +40,7 @@ public class andmeBaas {
 
         String sql = "INSERT INTO ylesanded (nimi, kirjeldus, tahtaeg, staatus) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = yhilduAndmebaasi(); //Ühendame andmebaasi
+        try (Connection conn = Ühenduvus.yhilduAndmebaasi(); //Ühendame andmebaasi
              PreparedStatement pstmt = conn.prepareStatement(sql)) { //Anname muutujale pstmt väärtuse
 
             //Määrame päringulause veergudele väärtused
@@ -73,10 +58,18 @@ public class andmeBaas {
 
     }
 
-    public void kõikÜlesanded() { //tõmbame ülesanded andmebaasist programmi
+    public void kõikÜlesanded() { //tõmbame ülesanded andmebaasist programmi  TODO LIPPING
 
     }
-    public void kustutaÜlesanne() { //eemaldame ülesande andmebaasist
+    public void kustutaÜlesanne() { //eemaldame ülesande andmebaasist       TODO LIPPING
+
+    }
+
+    public void muudaTähtaega() { //Muudame andmebaasis oleva ülesande tähtaega TODO HENRI
+
+    }
+
+    public void muudaKirjeldust() { //Muudame andmebaasis oleva ülesande kirjeldust TODO HENRI
 
     }
 }
